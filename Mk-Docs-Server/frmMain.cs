@@ -107,10 +107,10 @@ namespace Mk_Docs_Server
             string message = "Editor installed. Do you want to start it?";
             string title = "Sucessfully installed";
             MessageBoxButtons buttons = MessageBoxButtons.YesNo;
-            DialogResult result = MessageBox.Show(message, title, buttons, MessageBoxIcon.Warning);
+            DialogResult result = MessageBox.Show(message, title, buttons, MessageBoxIcon.Success);
             if (result == DialogResult.Yes)
             {
-                System.Diagnostics.Process.Start(Application.StartupPath + "\\Files\\atom-portable\\atom.exe");
+                System.Diagnostics.Process.Start(Application.StartupPath + "\\Files\\atom-portable\\AtomPortable.exe");
             }
             return true;
         }
