@@ -18,8 +18,8 @@ namespace Mk_Docs_Server
         // ---------------
         // Global Variables
         // ---------------
-        public string atomDownloadPath = "https://nxcloud.norku.de/index.php/s/4QWfpGcrzs8mjEC";
-        public string mkdocsServerDownloadPath = "&nbsp;"
+        public string atomDownloadPath = "https://nxcloud.norku.de/index.php/s/4QWfpGcrzs8mjEC/download/atom-editor.zip";
+        public string mkdocsserverinstallcommand = "pip --proxy http://kjs-03.lan.dd-schulen.de:3128 install mkdocs mkdocs-material break";
         public string WorkspacePath;
 
 
@@ -29,13 +29,15 @@ namespace Mk_Docs_Server
 
         public frmMain()
         {
-            if (!System.IO.Directory.Exists("/Files")) // Datei ordner erstellen wenn nicht vorhanden
+            // Create Files folder in Application Path if not exsistant
+            if (!Directory.Exists(Application.StartupPath + "\\Files"))
             {
-                System.IO.Directory.CreateDirectory("/Files");
+                Directory.CreateDirectory(Application.StartupPath + "\\Files");
             }
-                if (!System.IO.Directory.Exists("/Files/mkdocs")) // mk docs ordner erstellen wenn nicht vorhanden
+            // Create Files/mkdocs folder in Application Path if not exsistant
+            if (!Directory.Exists(Application.StartupPath + "\\Files\\mkdocs"))
             {
-                System.IO.Directory.CreateDirectory("/Files/mkdocs");
+                Directory.CreateDirectory(Application.StartupPath + "\\Files\\mkdocs");
             }
             InitializeComponent();
         }
@@ -68,7 +70,18 @@ namespace Mk_Docs_Server
             ZipWorkspaceFiles();
         }
 
-
+        private void btnClose_Click(object sender, EventArgs e)
+        {
+            string message = "Do you really want to close the Application?";
+            string title = "Close Application?";
+            MessageBoxButtons buttons = MessageBoxButtons.YesNo;
+            DialogResult result = MessageBox.Show(message, title, buttons, MessageBoxIcon.Warning);
+            if (result == DialogResult.Yes)
+            {
+                Application.Exit();
+            }
+        }
+        
         // ----------------
         // Methods
         // ----------------
@@ -76,7 +89,8 @@ namespace Mk_Docs_Server
 
         public bool InstallMKDocsServer()
         {
-            Application.Run(/*script.bat -mkdocs*/); // mkdocs mit pip3 installieren
+            // rund cmd.exe /c mkdocsserverinstallcommand
+            System.Diagnostics.Process.Start("cmd.exe", "/c " + mkdocsserverinstallcommand);
             return true;
         }
 
@@ -84,14 +98,13 @@ namespace Mk_Docs_Server
         {
             try
             {
-                WebClient webClient = new WebClient();
-                webClient.DownloadFile(atomDownloadPath, "/Files/atom-portable.zip");  // VSC Downloaden
-
-                using (var unzip = new Internals.Unzip("/Files/atom-portable.zip"))  // VSC entpacken
+                // Download file from atomDownloadPath to /Files/atom-portable.zip
+                using (WebClient client = new WebClient())
                 {
-                    unzip.ExtractToDirectory("/Files");
+                    client.DownloadFile(atomDownloadPath, Application.StartupPath + "\\Files\\atom-portable.zip");
                 }
-
+                // Extract /Files/atom-portable.zip to /Files/atom-portable
+                ZipFile.ExtractToDirectory(Application.StartupPath + "\\Files\\atom-portable.zip", Application.StartupPath + "\\Files\\atom-portable");
                 return true;
             }
             catch (Exception ex)
