@@ -18,7 +18,7 @@ namespace Mk_Docs_Server
         // ---------------
         // Global Variables
         // ---------------
-        public string atomDownloadPath = "https://nxcloud.norku.de/index.php/s/4QWfpGcrzs8mjEC/download/atom-editor.zip";
+        public string atomDownloadPath = "https://nxcloud.norku.de/index.php/s/oiaEg8KdjB4j9qL/download/atom-editor.zip";
         public string mkdocsserverinstallcommand = "pip --proxy http://kjs-03.lan.dd-schulen.de:3128 install mkdocs mkdocs-material break";
         public string WorkspacePath;
 
@@ -104,6 +104,14 @@ namespace Mk_Docs_Server
             ZipFile.ExtractToDirectory(Application.StartupPath + "\\Files\\atom-portable.zip", Application.StartupPath + "\\Files\\atom-portable");
             // Delete /Files/atom-portable.zip
             File.Delete(Application.StartupPath + "\\Files\\atom-portable.zip");
+            string message = "Editor installed. Do you want to start it?";
+            string title = "Sucessfully installed";
+            MessageBoxButtons buttons = MessageBoxButtons.YesNo;
+            DialogResult result = MessageBox.Show(message, title, buttons, MessageBoxIcon.Warning);
+            if (result == DialogResult.Yes)
+            {
+                System.Diagnostics.Process.Start(Application.StartupPath + "\\Files\\atom-portable\\atom.exe");
+            }
             return true;
         }
 
