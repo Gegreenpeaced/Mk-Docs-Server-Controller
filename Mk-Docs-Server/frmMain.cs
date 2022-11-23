@@ -107,7 +107,7 @@ namespace Mk_Docs_Server
             string message = "Editor installed. Do you want to start it?";
             string title = "Sucessfully installed";
             MessageBoxButtons buttons = MessageBoxButtons.YesNo;
-            DialogResult result = MessageBox.Show(message, title, buttons, MessageBoxIcon.Success);
+            DialogResult result = MessageBox.Show(message, title, buttons, MessageBoxIcon.Information);
             if (result == DialogResult.Yes)
             {
                 System.Diagnostics.Process.Start(Application.StartupPath + "\\Files\\atom-portable\\AtomPortable.exe");
@@ -117,63 +117,34 @@ namespace Mk_Docs_Server
 
         public bool OpenWorkspacePath()
         {
-            try
-            {
-                OpenFileDialog openFileDialog1 = new OpenFileDialog // File Dialog spezifizieren
-                {
-                    InitialDirectory = @"D:\",
-                    Title = "Gezippte Arbeitsdateien",
-
-                    CheckFileExists = true,
-                    CheckPathExists = true,
-
-                    DefaultExt = "zip",
-                    Filter = "zip files (*.zip)|*.zip",
-                    FilterIndex = 2,
-                    RestoreDirectory = true,
-
-                    ReadOnlyChecked = true,
-                    ShowReadOnly = true
-                };
-
-                if (openFileDialog1.ShowDialog() == DialogResult.OK) // Arbeitspfad angeben
-                {
-                    WorkspacePath = openFileDialog1.FileName;
-
-                    using (var unzip = new Internals.Unzip(WorkspacePath))
-                    {
-                        unzip.ExtractToDirectory("/Files/mkdocs"); // Datein entpacken und kopieren
-                    }
-                    return true;
-                }
-
-                else
-                {
-                    return false;
-                }
-            }
-
-            catch (Exception ex)
-            {
-                return false;
-            }
+            // Open zip file in filedialog and store in WorkspacePath
+            OpenFileDialog openFileDialog1 = new OpenFileDialog();
+            openFileDialog1.Filter = "Zip Files|*.zip";
+            openFileDialog1.Title = "Select a Zip File";
+            openFileDialog1.ShowDialog();
+            WorkspacePath = openFileDialog1.FileName;
+            // Extract zip file to /Files/mkdocs
+            ZipFile.ExtractToDirectory(WorkspacePath, Application.StartupPath + "\\Files\\mkdocs");
+            string message = "Workspace sucessfully imported.";
+            string title = "Sucessfully imported";
+            MessageBoxButtons buttons = MessageBoxButtons.OK;
+            DialogResult result = MessageBox.Show(message, title, buttons, MessageBoxIcon.Information);
+            return true;
         }
 
         public bool ZipWorkspaceFiles()
         {
-            string ZipFileName = "/Files/" + DateTime.Now.ToString("ddMMyyyy-HHmmssfffff") + ".zip"; // Name des Zip Files
-            string PathToZip; // Pfad zum Zippen
-
-            DialogResult result = folderBrowserDialog1.ShowDialog(); // Auswahl des Speicherpfades
-            //to check user pressed OK button or CANCEL button in show dialog  
-            if (result == DialogResult.OK)
-            {
-                //Paste the selected folder path to textbox  
-                PathToZip = folderBrowserDialog1.SelectedPath;
-                ZipFile.CreateFromDirectory(PathToZip, ZipFileName); // zippen der Datei
-                return true;
-            }
-            return false;
+            // Select Path to Zip mkdocs to
+            FolderBrowserDialog folderBrowserDialog1 = new FolderBrowserDialog();
+            folderBrowserDialog1.ShowDialog();
+            string ZipPath = folderBrowserDialog1.SelectedPath;
+            // Zip /Files/mkdocs to ZipPath with date and time
+            ZipFile.CreateFromDirectory(Application.StartupPath + "\\Files\\mkdocs", ZipPath + "\\mkdocs-" + DateTime.Now.ToString("dd-MM-yyyy-HH-mm-ss") + ".zip");
+            string message = "Workspace sucessfully exported.";
+            string title = "Sucessfully exported";
+            MessageBoxButtons buttons = MessageBoxButtons.OK;
+            DialogResult result = MessageBox.Show(message, title, buttons, MessageBoxIcon.Information);
+            return true;
         }
     }
 }
