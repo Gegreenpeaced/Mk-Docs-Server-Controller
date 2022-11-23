@@ -3,10 +3,10 @@
   <Profiles />
   <Settings>
     <Setting Name="EditorID" Type="System.Int32" Scope="User">
-      <Value Profile="(Default)" />
+      <Value Profile="(Default)">0</Value>
     </Setting>
     <Setting Name="EditorDownloadURL" Type="System.String" Scope="User">
-      <Value Profile="(Default)" />
+      <Value Profile="(Default)">https://1.1.1.1</Value>
     </Setting>
   </Settings>
 </SettingsFile>

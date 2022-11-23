@@ -25,6 +25,7 @@ namespace Mk_Docs_Server.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("0")]
         public int EditorID {
             get {
                 return ((int)(this["EditorID"]));
@@ -36,7 +37,7 @@ namespace Mk_Docs_Server.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        [global::System.Configuration.DefaultSettingValueAttribute("https://1.1.1.1")]
         public string EditorDownloadURL {
             get {
                 return ((string)(this["EditorDownloadURL"]));
