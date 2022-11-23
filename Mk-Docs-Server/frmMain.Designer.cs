@@ -119,7 +119,7 @@ namespace Mk_Docs_Server
             this.btnInstallVSC.Name = "btnInstallVSC";
             this.btnInstallVSC.Size = new System.Drawing.Size(188, 23);
             this.btnInstallVSC.TabIndex = 3;
-            this.btnInstallVSC.Text = "VSC installieren";
+            this.btnInstallVSC.Text = "Editor installieren";
             this.btnInstallVSC.UseVisualStyleBackColor = true;
             this.btnInstallVSC.Click += new System.EventHandler(this.btnInstallVSC_Click);
             // 

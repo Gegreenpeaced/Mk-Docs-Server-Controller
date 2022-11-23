@@ -96,21 +96,15 @@ namespace Mk_Docs_Server
 
         public bool InstallVSC()
         {
-            try
+            // Download file from atomDownloadPath to /Files/atom-portable.zip and extract it to /Files/atom-portable
+            using (WebClient client = new WebClient())
             {
-                // Download file from atomDownloadPath to /Files/atom-portable.zip
-                using (WebClient client = new WebClient())
-                {
-                    client.DownloadFile(atomDownloadPath, Application.StartupPath + "\\Files\\atom-portable.zip");
-                }
-                // Extract /Files/atom-portable.zip to /Files/atom-portable
-                ZipFile.ExtractToDirectory(Application.StartupPath + "\\Files\\atom-portable.zip", Application.StartupPath + "\\Files\\atom-portable");
-                return true;
+                client.DownloadFile(atomDownloadPath, Application.StartupPath + "\\Files\\atom-portable.zip");
             }
-            catch (Exception ex)
-            {
-                return false;
-            }
+            ZipFile.ExtractToDirectory(Application.StartupPath + "\\Files\\atom-portable.zip", Application.StartupPath + "\\Files\\atom-portable");
+            // Delete /Files/atom-portable.zip
+            File.Delete(Application.StartupPath + "\\Files\\atom-portable.zip");
+            return true;
         }
 
         public bool OpenWorkspacePath()
