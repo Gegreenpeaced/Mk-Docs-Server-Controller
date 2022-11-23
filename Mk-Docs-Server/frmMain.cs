@@ -49,25 +49,28 @@ namespace Mk_Docs_Server
 
         private void btnInstallVSC_Click(object sender, EventArgs e)
         {
-            InstallVSC();
+            InstallVSC(true);
         }
 
         private void btnInstallAll_Click(object sender, EventArgs e)
         {
-            InstallMKDocsServer();
-            InstallVSC();
-            OpenWorkspacePath();
-
+            InstallMKDocsServer(false);
+            InstallVSC(false);
+            OpenWorkspacePath(false);
+            string message = "Everything was sucessfully installed.";
+            string title = "Sucessfully installed";
+            MessageBoxButtons buttons = MessageBoxButtons.YesNo;
+            DialogResult result = MessageBox.Show(message, title, buttons, MessageBoxIcon.Information);
         }
 
         private void btnInstallWorkspaceFiles_Click(object sender, EventArgs e)
         {
-            OpenWorkspacePath();
+            OpenWorkspacePath(true);
         }
-
+        
         private void btnSaveWorkspaceFiles_Click(object sender, EventArgs e)
         {
-            ZipWorkspaceFiles();
+            ZipWorkspaceFiles(true);
         }
 
         private void btnClose_Click(object sender, EventArgs e)
@@ -87,14 +90,21 @@ namespace Mk_Docs_Server
         // ----------------
 
 
-        public bool InstallMKDocsServer()
+        public bool InstallMKDocsServer(bool ms)
         {
             // rund cmd.exe /c mkdocsserverinstallcommand
             System.Diagnostics.Process.Start("cmd.exe", "/c " + mkdocsserverinstallcommand);
+            if (ms)
+            {
+                string message = "Server installed.";
+                string title = "Sucessfully installed";
+                MessageBoxButtons buttons = MessageBoxButtons.OK;
+                DialogResult result = MessageBox.Show(message, title, buttons, MessageBoxIcon.Information);
+            }
             return true;
         }
 
-        public bool InstallVSC()
+        public bool InstallVSC(bool ms)
         {
             // Download file from atomDownloadPath to /Files/atom-portable.zip and extract it to /Files/atom-portable
             using (WebClient client = new WebClient())
@@ -104,18 +114,22 @@ namespace Mk_Docs_Server
             ZipFile.ExtractToDirectory(Application.StartupPath + "\\Files\\atom-portable.zip", Application.StartupPath + "\\Files\\atom-portable");
             // Delete /Files/atom-portable.zip
             File.Delete(Application.StartupPath + "\\Files\\atom-portable.zip");
-            string message = "Editor installed. Do you want to start it?";
-            string title = "Sucessfully installed";
-            MessageBoxButtons buttons = MessageBoxButtons.YesNo;
-            DialogResult result = MessageBox.Show(message, title, buttons, MessageBoxIcon.Information);
-            if (result == DialogResult.Yes)
+            // Message Box Check
+            if (ms)
             {
-                System.Diagnostics.Process.Start(Application.StartupPath + "\\Files\\atom-portable\\AtomPortable.exe");
+                string message = "Editor installed. Do you want to start it?";
+                string title = "Sucessfully installed";
+                MessageBoxButtons buttons = MessageBoxButtons.YesNo;
+                DialogResult result = MessageBox.Show(message, title, buttons, MessageBoxIcon.Information);
+                if (result == DialogResult.Yes)
+                {
+                    System.Diagnostics.Process.Start(Application.StartupPath + "\\Files\\atom-portable\\AtomPortable.exe");
+                }
             }
             return true;
         }
 
-        public bool OpenWorkspacePath()
+        public bool OpenWorkspacePath(bool ms)
         {
             // Open zip file in filedialog and store in WorkspacePath
             OpenFileDialog openFileDialog1 = new OpenFileDialog();
@@ -125,14 +139,19 @@ namespace Mk_Docs_Server
             WorkspacePath = openFileDialog1.FileName;
             // Extract zip file to /Files/mkdocs
             ZipFile.ExtractToDirectory(WorkspacePath, Application.StartupPath + "\\Files\\mkdocs");
-            string message = "Workspace sucessfully imported.";
-            string title = "Sucessfully imported";
-            MessageBoxButtons buttons = MessageBoxButtons.OK;
-            DialogResult result = MessageBox.Show(message, title, buttons, MessageBoxIcon.Information);
+            // Message Box Check
+            if (ms == true)
+            {
+                string message = "Workspace files installed.";
+                string title = "Sucessfully installed";
+                MessageBoxButtons buttons = MessageBoxButtons.OK;
+                DialogResult result = MessageBox.Show(message, title, buttons, MessageBoxIcon.Information);
+               
+            }
             return true;
         }
 
-        public bool ZipWorkspaceFiles()
+        public bool ZipWorkspaceFiles(bool ms)
         {
             // Select Path to Zip mkdocs to
             FolderBrowserDialog folderBrowserDialog1 = new FolderBrowserDialog();
@@ -140,10 +159,14 @@ namespace Mk_Docs_Server
             string ZipPath = folderBrowserDialog1.SelectedPath;
             // Zip /Files/mkdocs to ZipPath with date and time
             ZipFile.CreateFromDirectory(Application.StartupPath + "\\Files\\mkdocs", ZipPath + "\\mkdocs-" + DateTime.Now.ToString("dd-MM-yyyy-HH-mm-ss") + ".zip");
-            string message = "Workspace sucessfully exported.";
-            string title = "Sucessfully exported";
-            MessageBoxButtons buttons = MessageBoxButtons.OK;
-            DialogResult result = MessageBox.Show(message, title, buttons, MessageBoxIcon.Information);
+            // Message Box Check
+            if (ms == true)
+            {
+                string message = "Workspace sucessfully exported.";
+                string title = "Sucessfully exported";
+                MessageBoxButtons buttons = MessageBoxButtons.OK;
+                DialogResult result = MessageBox.Show(message, title, buttons, MessageBoxIcon.Information);
+            }
             return true;
         }
     }

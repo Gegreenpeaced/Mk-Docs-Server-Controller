@@ -99,7 +99,7 @@ namespace Mk_Docs_Server
             this.btnSaveWorkspaceFiles.Name = "btnSaveWorkspaceFiles";
             this.btnSaveWorkspaceFiles.Size = new System.Drawing.Size(188, 23);
             this.btnSaveWorkspaceFiles.TabIndex = 5;
-            this.btnSaveWorkspaceFiles.Text = "Arbeitsdateien sichern";
+            this.btnSaveWorkspaceFiles.Text = "Arbeitsdateien exportieren";
             this.btnSaveWorkspaceFiles.UseVisualStyleBackColor = true;
             this.btnSaveWorkspaceFiles.Click += new System.EventHandler(this.btnSaveWorkspaceFiles_Click);
             // 
@@ -109,7 +109,7 @@ namespace Mk_Docs_Server
             this.btnInstallWorkspaceFiles.Name = "btnInstallWorkspaceFiles";
             this.btnInstallWorkspaceFiles.Size = new System.Drawing.Size(188, 23);
             this.btnInstallWorkspaceFiles.TabIndex = 4;
-            this.btnInstallWorkspaceFiles.Text = "Arbeitsdateien auswählen";
+            this.btnInstallWorkspaceFiles.Text = "Arbeitsdateien importieren";
             this.btnInstallWorkspaceFiles.UseVisualStyleBackColor = true;
             this.btnInstallWorkspaceFiles.Click += new System.EventHandler(this.btnInstallWorkspaceFiles_Click);
             // 
