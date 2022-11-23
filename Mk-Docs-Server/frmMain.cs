@@ -42,10 +42,28 @@ namespace Mk_Docs_Server
             InitializeComponent();
         }
 
-        
+
         // ----------------
         // Form Buttons
         // ----------------
+
+        private void btnSettings_Click(object sender, EventArgs e)
+        {
+            // Open Settings Form
+            frmSettings frmSettings = new frmSettings();
+            frmSettings.Show();
+        }
+
+        private void btnServeServer_Click(object sender, EventArgs e)
+        {
+            if (ServeServer(true) == 3)
+            {
+                string message2 = "MkDocs Server was not installed. Please install it first.";
+                string title2 = "MkDocs Server not installed";
+                MessageBoxButtons buttons2 = MessageBoxButtons.OK;
+                DialogResult result2 = MessageBox.Show(message2, title2, buttons2, MessageBoxIcon.Error);
+            }
+        }
 
         private void btnInstallVSC_Click(object sender, EventArgs e)
         {
@@ -61,6 +79,19 @@ namespace Mk_Docs_Server
             string title = "Sucessfully installed";
             MessageBoxButtons buttons = MessageBoxButtons.YesNo;
             DialogResult result = MessageBox.Show(message, title, buttons, MessageBoxIcon.Information);
+            if (DialogResult.Yes == result)
+            {
+                // if ServeServer(true) returns 3, then mkdocs server was not installed
+                if (ServeServer(true) == 3)
+                {
+                    string message2 = "MkDocs Server was not installed. Please install it first.";
+                    string title2 = "MkDocs Server not installed";
+                    MessageBoxButtons buttons2 = MessageBoxButtons.OK;
+                    DialogResult result2 = MessageBox.Show(message2, title2, buttons2, MessageBoxIcon.Error);
+                }
+                
+                
+            }
         }
 
         private void btnInstallWorkspaceFiles_Click(object sender, EventArgs e)
@@ -84,16 +115,50 @@ namespace Mk_Docs_Server
                 Application.Exit();
             }
         }
-        
+
         // ----------------
         // Methods
         // ----------------
 
+        public int ServeServer(bool ms)
+        {
+            // Check if mkdocsokfile is exsistant in mkdocs folder
+            if (File.Exists(Application.StartupPath + "\\Files\\mkdocs\\mkdocsokfile"))
+            {
+                // open file dialog to select folder to serve
+                FolderBrowserDialog fbd = new FolderBrowserDialog();
+                fbd.Description = "Select the folder you want to serve";
+                if (fbd.ShowDialog() == DialogResult.OK)
+                {
+                    // open cmd and serve selected folder
+                    System.Diagnostics.Process.Start("cmd.exe", "/c mkdocs serve -a" + fbd.SelectedPath);
+                    if (ms == true)
+                    {
+                        string message = "The Server is now running.";
+                        string title = "Server running";
+                        MessageBoxButtons buttons = MessageBoxButtons.OK;
+                        DialogResult result = MessageBox.Show(message, title, buttons, MessageBoxIcon.Information);
+                    }
+                    return 1;
+                }
+                else
+                {
+                    // Promt message box with invalid folder
+                        string message = "The selected folder is invalid. Try again";
+                        string title = "Invalid folder";
+                        MessageBoxButtons buttons = MessageBoxButtons.OK;
+                        DialogResult result = MessageBox.Show(message, title, buttons, MessageBoxIcon.Error);
+                }
+            }
+            return 3;
+        }
 
         public bool InstallMKDocsServer(bool ms)
         {
             // rund cmd.exe /c mkdocsserverinstallcommand
             System.Diagnostics.Process.Start("cmd.exe", "/c " + mkdocsserverinstallcommand);
+            // Create mkdocsokfile
+            File.Create(Application.StartupPath + "\\Files\\mkdocs\\mkdocsokfile");
             if (ms)
             {
                 string message = "Server installed.";

@@ -38,21 +38,25 @@ namespace Mk_Docs_Server
             this.btnInstallWorkspaceFiles = new System.Windows.Forms.Button();
             this.btnInstallVSC = new System.Windows.Forms.Button();
             this.folderBrowserDialog1 = new System.Windows.Forms.FolderBrowserDialog();
+            this.gbPanel = new System.Windows.Forms.GroupBox();
+            this.btnServeServer = new System.Windows.Forms.Button();
             this.gbWorkspace.SuspendLayout();
+            this.gbPanel.SuspendLayout();
             this.SuspendLayout();
             // 
             // btnSettings
             // 
-            this.btnSettings.Location = new System.Drawing.Point(12, 185);
+            this.btnSettings.Location = new System.Drawing.Point(343, 185);
             this.btnSettings.Name = "btnSettings";
             this.btnSettings.Size = new System.Drawing.Size(75, 23);
             this.btnSettings.TabIndex = 0;
             this.btnSettings.Text = "Settings";
             this.btnSettings.UseVisualStyleBackColor = true;
+            this.btnSettings.Click += new System.EventHandler(this.btnSettings_Click);
             // 
             // btnClose
             // 
-            this.btnClose.Location = new System.Drawing.Point(450, 185);
+            this.btnClose.Location = new System.Drawing.Point(12, 185);
             this.btnClose.Name = "btnClose";
             this.btnClose.Size = new System.Drawing.Size(75, 23);
             this.btnClose.TabIndex = 1;
@@ -76,7 +80,7 @@ namespace Mk_Docs_Server
             this.gbWorkspace.Controls.Add(this.btnInstallWorkspaceFiles);
             this.gbWorkspace.Controls.Add(this.btnInstallVSC);
             this.gbWorkspace.Controls.Add(this.btnInstallServer);
-            this.gbWorkspace.Location = new System.Drawing.Point(325, 12);
+            this.gbWorkspace.Location = new System.Drawing.Point(218, 12);
             this.gbWorkspace.Name = "gbWorkspace";
             this.gbWorkspace.Size = new System.Drawing.Size(200, 167);
             this.gbWorkspace.TabIndex = 3;
@@ -123,17 +127,39 @@ namespace Mk_Docs_Server
             this.btnInstallVSC.UseVisualStyleBackColor = true;
             this.btnInstallVSC.Click += new System.EventHandler(this.btnInstallVSC_Click);
             // 
+            // gbPanel
+            // 
+            this.gbPanel.Controls.Add(this.btnServeServer);
+            this.gbPanel.Location = new System.Drawing.Point(12, 12);
+            this.gbPanel.Name = "gbPanel";
+            this.gbPanel.Size = new System.Drawing.Size(200, 167);
+            this.gbPanel.TabIndex = 7;
+            this.gbPanel.TabStop = false;
+            this.gbPanel.Text = "Panel";
+            // 
+            // btnServeServer
+            // 
+            this.btnServeServer.Location = new System.Drawing.Point(6, 19);
+            this.btnServeServer.Name = "btnServeServer";
+            this.btnServeServer.Size = new System.Drawing.Size(188, 23);
+            this.btnServeServer.TabIndex = 5;
+            this.btnServeServer.Text = "Starte Server";
+            this.btnServeServer.UseVisualStyleBackColor = true;
+            this.btnServeServer.Click += new System.EventHandler(this.btnServeServer_Click);
+            // 
             // frmMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(537, 217);
+            this.ClientSize = new System.Drawing.Size(429, 217);
+            this.Controls.Add(this.gbPanel);
             this.Controls.Add(this.gbWorkspace);
             this.Controls.Add(this.btnClose);
             this.Controls.Add(this.btnSettings);
             this.Name = "frmMain";
             this.Text = "MK Docs Server Manager";
             this.gbWorkspace.ResumeLayout(false);
+            this.gbPanel.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
@@ -149,6 +175,8 @@ namespace Mk_Docs_Server
         private System.Windows.Forms.Button btnInstallWorkspaceFiles;
         private System.Windows.Forms.Button btnInstallVSC;
         private System.Windows.Forms.FolderBrowserDialog folderBrowserDialog1;
+        private System.Windows.Forms.GroupBox gbPanel;
+        private System.Windows.Forms.Button btnServeServer;
     }
 }
 
