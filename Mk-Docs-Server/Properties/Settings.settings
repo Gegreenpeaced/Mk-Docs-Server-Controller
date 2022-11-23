@@ -2,11 +2,11 @@
 <SettingsFile xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings" CurrentProfile="(Default)" GeneratedClassNamespace="Mk_Docs_Server.Properties" GeneratedClassName="Settings">
   <Profiles />
   <Settings>
-    <Setting Name="EditorID" Type="System.String" Scope="User">
-      <Value Profile="(Default)">atom</Value>
+    <Setting Name="EditorID" Type="System.Int32" Scope="User">
+      <Value Profile="(Default)" />
     </Setting>
     <Setting Name="EditorDownloadURL" Type="System.String" Scope="User">
-      <Value Profile="(Default)">N/A</Value>
+      <Value Profile="(Default)" />
     </Setting>
   </Settings>
 </SettingsFile>

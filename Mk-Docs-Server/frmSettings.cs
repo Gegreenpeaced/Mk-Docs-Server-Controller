@@ -16,28 +16,28 @@ namespace Mk_Docs_Server
         {
             InitializeComponent();
             // Select combobox Editor Entry from Settings file variable EditorID and display it
-
-            /*/if (Properties.Settings.Default.EditorID == "atom")
+            
+            if (Properties.Settings.Default.EditorID == 0)  // 1 = Atom
             {
-                cbEditors.SelectedIndex = -1;
+                cbEditors.SelectedIndex = 0;
             }
-            if (Properties.Settings.Default.EditorID == "vs")
+            if (Properties.Settings.Default.EditorID == 1) // 1 = Visual Studio Code
             {
                 cbEditors.SelectedIndex = 1;
             }
-            else
+            if (Properties.Settings.Default.EditorID == 2) // 2 = Other
             {
                 cbEditors.SelectedIndex = 2;
-            }/*/
+            }
 
-            tbEditorDownloadURL.Text = cbEditors.SelectedIndex.ToString();
+            tbEditorDownloadURL.Text = Properties.Settings.Default.EditorID.ToString();
 
         }
 
         // If cbEditors is changed, check if SelectedIndex is 2
         private void cbEditors_SelectedIndexChanged(object sender, EventArgs e)
         {
-            tbEditorDownloadURL.Text = cbEditors.SelectedIndex.ToString();
+            tbEditorDownloadURL.Text = Properties.Settings.Default.EditorID.ToString();
             if (cbEditors.SelectedIndex == 2)
             {
                 // If SelectedIndex is 2, show the textbox and label
@@ -52,19 +52,20 @@ namespace Mk_Docs_Server
 
         private void btnClose_Click(object sender, EventArgs e)
         {
-            string message = "Do you really want to close the Window?";
-            string title = "Close Window?";
+            string message = "You will need to restart the Application!";
+            string title = "Warning!";
             MessageBoxButtons buttons = MessageBoxButtons.YesNo;
             DialogResult result = MessageBox.Show(message, title, buttons, MessageBoxIcon.Warning);
             if (result == DialogResult.Yes)
             {
-                this.Close();
+                Application.Exit();
             }
         }
 
         private void btnSave_Click(object sender, EventArgs e)
         {
             Properties.Settings.Default.EditorDownloadURL = tbEditorDownloadURL.Text;
+            Properties.Settings.Default.EditorID = cbEditors.SelectedIndex;
             Properties.Settings.Default.Save();
         }
     }

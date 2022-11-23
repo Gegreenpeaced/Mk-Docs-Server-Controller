@@ -18,10 +18,13 @@ namespace Mk_Docs_Server
         // ---------------
         // Global Variables
         // ---------------
+        
+        public string editorDownloadPath;
         public string atomDownloadPath = "https://nxcloud.norku.de/index.php/s/oiaEg8KdjB4j9qL/download/atom-editor.zip";
         public string mkdocsserverinstallcommand = "pip --proxy http://kjs-03.lan.dd-schulen.de:3128 install mkdocs mkdocs-material break";
-        public string WorkspacePath;
-
+        public string workspacePath;
+        public string settingsEditorDownloadURL = Properties.Settings.Default.EditorDownloadURL;
+        public int settingsEditorID = Properties.Settings.Default.EditorID;
 
         // ----------------
         // Main Form
@@ -29,6 +32,8 @@ namespace Mk_Docs_Server
 
         public frmMain()
         {
+            editorDownloadPath = (settingsEditorID == 2) ? settingsEditorDownloadURL : atomDownloadPath; // Vergleich ob EditorID 2 ist, wenn ja dann EditorDownloadURL, wenn nein dann atomDownloadPath
+
             // Create Files folder in Application Path if not exsistant
             if (!Directory.Exists(Application.StartupPath + "\\Files"))
             {
@@ -123,7 +128,7 @@ namespace Mk_Docs_Server
         public int ServeServer(bool ms)
         {
             // Check if mkdocsokfile is exsistant in mkdocs folder
-            if (File.Exists(Application.StartupPath + "\\Files\\mkdocs\\mkdocsokfile"))
+            if (File.Exists(Application.StartupPath + "\\Files\\mkdocs\\mkdocsokfile.file"))
             {
                 // open file dialog to select folder to serve
                 FolderBrowserDialog fbd = new FolderBrowserDialog();
@@ -158,7 +163,7 @@ namespace Mk_Docs_Server
             // rund cmd.exe /c mkdocsserverinstallcommand
             System.Diagnostics.Process.Start("cmd.exe", "/c " + mkdocsserverinstallcommand);
             // Create mkdocsokfile
-            File.Create(Application.StartupPath + "\\Files\\mkdocs\\mkdocsokfile");
+            File.Create(Application.StartupPath + "\\Files\\mkdocs\\mkdocsokfile.file");
             if (ms)
             {
                 string message = "Server installed.";
@@ -201,9 +206,9 @@ namespace Mk_Docs_Server
             openFileDialog1.Filter = "Zip Files|*.zip";
             openFileDialog1.Title = "Select a Zip File";
             openFileDialog1.ShowDialog();
-            WorkspacePath = openFileDialog1.FileName;
+            workspacePath = openFileDialog1.FileName;
             // Extract zip file to /Files/mkdocs
-            ZipFile.ExtractToDirectory(WorkspacePath, Application.StartupPath + "\\Files\\mkdocs");
+            ZipFile.ExtractToDirectory(workspacePath, Application.StartupPath + "\\Files\\mkdocs");
             // Message Box Check
             if (ms == true)
             {
