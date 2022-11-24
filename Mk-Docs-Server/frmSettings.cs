@@ -22,9 +22,12 @@ namespace Mk_Docs_Server
             }
             if (Properties.Settings.Default.EditorID == 1) // 1 = Visual Studio Code
             {
-                cbEditors.SelectedIndex = 1;
+                /*/cbEditors.SelectedIndex = 1;
                 tbEditorDownloadURL.Enabled = false;
-                lblEditorDownload.Text = "Not Available:";
+                lblEditorDownload.Text = "Not Available:";/*/
+
+                // Display error message
+                MessageBox.Show("Visual Studio Code is not yet supported. Please select another editor.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
             if (Properties.Settings.Default.EditorID == 2) // 2 = Notepad++
             {
@@ -69,6 +72,12 @@ namespace Mk_Docs_Server
             {
                 tbEditorDownloadURL.Enabled = true;
                 lblEditorDownload.Text = "Path to the executeable:";
+            }
+            if (cbEditors.SelectedIndex == 1) // 1 = Visual Studio Code
+            {
+                cbEditors.SelectedIndex = 0;
+                // Display error message
+                MessageBox.Show("Visual Studio Code is not yet supported. Please select another editor.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 

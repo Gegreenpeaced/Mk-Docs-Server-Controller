@@ -40,6 +40,7 @@ namespace Mk_Docs_Server
             this.folderBrowserDialog1 = new System.Windows.Forms.FolderBrowserDialog();
             this.gbPanel = new System.Windows.Forms.GroupBox();
             this.btnServeServer = new System.Windows.Forms.Button();
+            this.btnStartEditor = new System.Windows.Forms.Button();
             this.gbWorkspace.SuspendLayout();
             this.gbPanel.SuspendLayout();
             this.SuspendLayout();
@@ -129,6 +130,7 @@ namespace Mk_Docs_Server
             // 
             // gbPanel
             // 
+            this.gbPanel.Controls.Add(this.btnStartEditor);
             this.gbPanel.Controls.Add(this.btnServeServer);
             this.gbPanel.Location = new System.Drawing.Point(12, 12);
             this.gbPanel.Name = "gbPanel";
@@ -146,6 +148,16 @@ namespace Mk_Docs_Server
             this.btnServeServer.Text = "Starte Server";
             this.btnServeServer.UseVisualStyleBackColor = true;
             this.btnServeServer.Click += new System.EventHandler(this.btnServeServer_Click);
+            // 
+            // btnStartEditor
+            // 
+            this.btnStartEditor.Location = new System.Drawing.Point(6, 48);
+            this.btnStartEditor.Name = "btnStartEditor";
+            this.btnStartEditor.Size = new System.Drawing.Size(188, 23);
+            this.btnStartEditor.TabIndex = 6;
+            this.btnStartEditor.Text = "Starte Editor";
+            this.btnStartEditor.UseVisualStyleBackColor = true;
+            this.btnStartEditor.Click += new System.EventHandler(this.btnStartEditor_Click);
             // 
             // frmMain
             // 
@@ -177,6 +189,7 @@ namespace Mk_Docs_Server
         private System.Windows.Forms.FolderBrowserDialog folderBrowserDialog1;
         private System.Windows.Forms.GroupBox gbPanel;
         private System.Windows.Forms.Button btnServeServer;
+        private System.Windows.Forms.Button btnStartEditor;
     }
 }
 

@@ -8,9 +8,9 @@ namespace Mk_Docs_Server
 {
     internal class Link
     {
-        private static string _downloadPathAtom = "https://nxcloud.norku.de/index.php/s/oiaEg8KdjB4j9qL/download/atom-editor.zip";
-        private static string _downloadPathVSC = "https://replace.de";
-        private static string _downloadPathNotepadPP = "https://replace.de";
+        private static string _downloadPathAtom = "https://nxcloud.norku.de/index.php/s/exGqkZWeqCJmFae/download/atom-portable.zip";
+        private static string _downloadPathVSC = "https://replace.de"; // To Do (Licence Problems)
+        private static string _downloadPathNotepadPP = "https://nxcloud.norku.de/index.php/s/Mq2Ex3cMjpArBf4/download/NotepadPP-portable.zip";
         private static string _downloadCommandMKDocs = "pip --proxy http://kjs-03.lan.dd-schulen.de:3128 install mkdocs mkdocs-material break";
         private static string _fileVersion = "v1.0";
 

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Activities;
 using System.IO;
 using System.IO.Compression;
 using System.Net;
@@ -99,6 +100,11 @@ namespace Mk_Docs_Server
             ZipWorkspaceFiles(true);
         }
 
+        private void btnStartEditor_Click(object sender, EventArgs e)
+        {
+            OpenEditor();
+        }
+
         private void btnClose_Click(object sender, EventArgs e)
         {
             string message = "Do you really want to close the Application?";
@@ -114,11 +120,29 @@ namespace Mk_Docs_Server
         // ----------------
         // Methods
         // ----------------
-
+        public bool OpenEditor()
+        {
+            // Check if editorLocalPath is set
+            if (editorLocalPath == null)
+            {
+                string message = "Please set the editor path in the settings.";
+                string title = "Editor path not set";
+                MessageBoxButtons buttons = MessageBoxButtons.OK;
+                DialogResult result = MessageBox.Show(message, title, buttons, MessageBoxIcon.Error);
+                return false;
+            }
+            else
+            {
+                // Open editor.exe from editorLocalPath
+                System.Diagnostics.Process.Start(editorLocalPath);
+                return true;
+            }
+        }
+        
         public int ServeServer(bool ms)
         {
             // Check if mkdocsokfile is exsistant in mkdocs folder
-            if (File.Exists(Application.StartupPath + "\\Files\\mkdocs\\mkdocsokfile.file"))
+            if (File.Exists(Application.StartupPath + "\\Files\\mkdocs\\mkdocsokfile.s"))
             {
                 // open file dialog to select folder to serve
                 FolderBrowserDialog fbd = new FolderBrowserDialog();
@@ -153,7 +177,7 @@ namespace Mk_Docs_Server
             // rund cmd.exe /c mkdocsserverinstallcommand
             System.Diagnostics.Process.Start("cmd.exe", "/c " + Link.downloadCommandMKDocs());
             // Create mkdocsokfile
-            File.Create(Application.StartupPath + "\\Files\\mkdocs\\mkdocsokfile.file");
+            File.Create(Application.StartupPath + "\\Files\\mkdocs\\mkdocsokfile.s").Close();
             if (ms)
             {
                 string message = "Server installed.";
@@ -170,7 +194,21 @@ namespace Mk_Docs_Server
             if (Properties.Settings.Default.EditorID == 4)
             {
                 // EDITOR (Windows)
-                editorLocalPath = ""; // noch spezifizieren
+                // set editorDownloadPath to the windows system folder
+                editorLocalPath = Environment.GetFolderPath(Environment.SpecialFolder.Windows) + @"\notepad.exe";
+
+                if (ms)
+                {
+                    string message = "Editor sucessfully linked. Do you want to start it?";
+                    string title = "Sucessfully linked";
+                    MessageBoxButtons buttons = MessageBoxButtons.YesNo;
+                    DialogResult result = MessageBox.Show(message, title, buttons, MessageBoxIcon.Information);
+                    if (result == DialogResult.Yes)
+                    {
+                        System.Diagnostics.Process.Start(editorLocalPath);
+                    }
+                }
+                return true;
             }
             if (Properties.Settings.Default.EditorID == 5)
             {
@@ -187,6 +225,7 @@ namespace Mk_Docs_Server
                         System.Diagnostics.Process.Start(editorLocalPath);
                     }
                 }
+                return true;
             }
             else // IF EDITOR NEEDS TO BE DOWNLOADED
             {
@@ -196,41 +235,60 @@ namespace Mk_Docs_Server
                     {
                         editorDownloadPath = Link.downloadPathAtom();
                         client.DownloadFile(editorDownloadPath, Application.StartupPath + "\\Files\\editor-portable.zip");
+                        editorLocalPath = Application.StartupPath + "\\Files\\editor-portable\\editor.exe";
                     }
                     if (Properties.Settings.Default.EditorID == 1) // Download für VSC
                     {
                         editorDownloadPath = Link.downloadPathVSC();
                         client.DownloadFile(editorDownloadPath, Application.StartupPath + "\\Files\\editor-portable.zip");
+                        editorLocalPath = Application.StartupPath + "\\Files\\editor-portable\\editor.exe";
                     }
                     if (Properties.Settings.Default.EditorID == 2) // Download für Notepad++
                     {
                         editorDownloadPath = Link.dowloadPathNotepadPP();
                         client.DownloadFile(editorDownloadPath, Application.StartupPath + "\\Files\\editor-portable.zip");
+                        editorLocalPath = Application.StartupPath + "\\Files\\editor-portable\\editor.exe";
                     }
                     if(Properties.Settings.Default.EditorID == 3) // Download für den Spezifizierten Editor
                     {
                         editorDownloadPath = Properties.Settings.Default.EditorDownloadURL;
                         client.DownloadFile(editorDownloadPath, Application.StartupPath + "\\Files\\editor-portable.zip");
+                        editorLocalPath = Application.StartupPath + "\\Files\\editor-portable\\editor.exe";
                     }
                 }
 
-                ZipFile.ExtractToDirectory(Application.StartupPath + "\\Files\\editor-portable.zip", Application.StartupPath + "\\Files\\editor-portable");
-                // Delete /Files/editor-portable.zip
-                File.Delete(Application.StartupPath + "\\Files\\editor-portable.zip");
-                // Message Box Check
-                if (ms)
+                // check if editor-portable.zip is exsistant in Files folder
+                if (File.Exists(Application.StartupPath + "\\Files\\editor-portable.zip"))
                 {
-                    string message = "Editor installed. Do you want to start it?";
-                    string title = "Sucessfully installed";
-                    MessageBoxButtons buttons = MessageBoxButtons.YesNo;
-                    DialogResult result = MessageBox.Show(message, title, buttons, MessageBoxIcon.Information);
-                    if (result == DialogResult.Yes)
+                    // unzip editor-portable.zip
+                    ZipFile.ExtractToDirectory(Application.StartupPath + "\\Files\\editor-portable.zip", Application.StartupPath + "\\Files\\editor-portable");
+                    // delete editor-portable.zip
+                    File.Delete(Application.StartupPath + "\\Files\\editor-portable.zip");
+                    if (ms)
                     {
-                        System.Diagnostics.Process.Start(Application.StartupPath + "\\Files\\editor-portable\\editor.exe");
+                        string message = "Editor sucessfully installed. Do you want to start it?";
+                        string title = "Sucessfully installed";
+                        MessageBoxButtons buttons = MessageBoxButtons.YesNo;
+                        DialogResult result = MessageBox.Show(message, title, buttons, MessageBoxIcon.Information);
+                        if (result == DialogResult.Yes)
+                        {
+                            System.Diagnostics.Process.Start(editorLocalPath);
+                        }
                     }
+                    return true;
+                }
+                else
+                {
+                    if (ms)
+                    {
+                        string message = "Editor installation failed.";
+                        string title = "Installation failed";
+                        MessageBoxButtons buttons = MessageBoxButtons.OK;
+                        DialogResult result = MessageBox.Show(message, title, buttons, MessageBoxIcon.Error);
+                    }
+                    return false;
                 }
             }
-            return true;
         }
 
         public bool OpenWorkspacePath(bool ms)
