@@ -181,23 +181,27 @@ namespace Mk_Docs_Server
                     if (Properties.Settings.Default.EditorID == 0) // Download für Atom
                     {
                         editorDownloadPath = Link.downloadPathAtom();
+                        client.DownloadFile(editorDownloadPath, Application.StartupPath + "\\Files\\editor-portable.zip");
                     }
                     if (Properties.Settings.Default.EditorID == 1) // Download für VSC
                     {
                         editorDownloadPath = Link.downloadPathVSC();
+                        client.DownloadFile(editorDownloadPath, Application.StartupPath + "\\Files\\editor-portable.zip");
                     }
                     if (Properties.Settings.Default.EditorID == 2) // Download für Notepad++
                     {
                         editorDownloadPath = Link.dowloadPathNotepadPP();
+                        client.DownloadFile(editorDownloadPath, Application.StartupPath + "\\Files\\editor-portable.zip");
                     }
                     if(Properties.Settings.Default.EditorID == 3) // Download für den Spezifizierten Editor
                     {
                         editorDownloadPath = Properties.Settings.Default.EditorDownloadURL;
+                        client.DownloadFile(editorDownloadPath, Application.StartupPath + "\\Files\\editor-portable.zip");
                     }
-                    // Test  // client.DownloadFile(Link.GetPath(), Application.StartupPath + "\\Files\\atom-portable.zip");
                 }
-                ZipFile.ExtractToDirectory(Application.StartupPath + "\\Files\\editor-portable.zip", Application.StartupPath + "\\Files\\atom-portable");
-                // Delete /Files/atom-portable.zip
+
+                ZipFile.ExtractToDirectory(Application.StartupPath + "\\Files\\editor-portable.zip", Application.StartupPath + "\\Files\\editor-portable");
+                // Delete /Files/editor-portable.zip
                 File.Delete(Application.StartupPath + "\\Files\\editor-portable.zip");
                 // Message Box Check
                 if (ms)

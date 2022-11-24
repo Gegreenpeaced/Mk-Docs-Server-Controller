@@ -1,0 +1,3 @@
+﻿umbenennung der portable .zip files
+
+Lokale Editoren einbauen. (Optionen: URL, Editor, LocalPath)
