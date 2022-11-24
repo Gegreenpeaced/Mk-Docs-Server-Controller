@@ -11,22 +11,18 @@ namespace Mk_Docs_Server
         // ---------------
         // Global Variables
         // ---------------
-        
-        // Noch variablen anpassen mit der Auslagerung in die Link.cs [Work]
+
+
         public string editorDownloadPath;
-        public string mkdocsserverinstallcommand = "pip --proxy http://kjs-03.lan.dd-schulen.de:3128 install mkdocs mkdocs-material break";
         public string workspacePath;
-        public string settingsEditorDownloadURL = Properties.Settings.Default.EditorDownloadURL;
-        public int settingsEditorID = Properties.Settings.Default.EditorID;
+
 
         // ----------------
         // Main Form
         // ----------------
 
         public frmMain()
-        {
-            // editorDownloadPath = (settingsEditorID == 2) ? settingsEditorDownloadURL : atomDownloadPath; // Vergleich ob EditorID 2 ist, wenn ja dann EditorDownloadURL, wenn nein dann atomDownloadPath
-
+        { 
             // Create Files folder in Application Path if not exsistant
             if (!Directory.Exists(Application.StartupPath + "\\Files"))
             {
@@ -63,15 +59,15 @@ namespace Mk_Docs_Server
             }
         }
 
-        private void btnInstallVSC_Click(object sender, EventArgs e)
+        private void btnInstallEditor_Click(object sender, EventArgs e)
         {
-            InstallVSC(true);
+            InstallEditor(true);
         }
 
         private void btnInstallAll_Click(object sender, EventArgs e)
         {
             InstallMKDocsServer(false);
-            InstallVSC(false);
+            InstallEditor(false);
             OpenWorkspacePath(false);
             string message = "Everything was sucessfully installed.";
             string title = "Sucessfully installed";
@@ -87,8 +83,8 @@ namespace Mk_Docs_Server
                     MessageBoxButtons buttons2 = MessageBoxButtons.OK;
                     DialogResult result2 = MessageBox.Show(message2, title2, buttons2, MessageBoxIcon.Error);
                 }
-                
-                
+
+
             }
         }
 
@@ -96,7 +92,7 @@ namespace Mk_Docs_Server
         {
             OpenWorkspacePath(true);
         }
-        
+
         private void btnSaveWorkspaceFiles_Click(object sender, EventArgs e)
         {
             ZipWorkspaceFiles(true);
@@ -142,10 +138,10 @@ namespace Mk_Docs_Server
                 else
                 {
                     // Promt message box with invalid folder
-                        string message = "The selected folder is invalid. Try again";
-                        string title = "Invalid folder";
-                        MessageBoxButtons buttons = MessageBoxButtons.OK;
-                        DialogResult result = MessageBox.Show(message, title, buttons, MessageBoxIcon.Error);
+                    string message = "The selected folder is invalid. Try again";
+                    string title = "Invalid folder";
+                    MessageBoxButtons buttons = MessageBoxButtons.OK;
+                    DialogResult result = MessageBox.Show(message, title, buttons, MessageBoxIcon.Error);
                 }
             }
             return 3;
@@ -154,7 +150,7 @@ namespace Mk_Docs_Server
         public bool InstallMKDocsServer(bool ms)
         {
             // rund cmd.exe /c mkdocsserverinstallcommand
-            System.Diagnostics.Process.Start("cmd.exe", "/c " + mkdocsserverinstallcommand);
+            System.Diagnostics.Process.Start("cmd.exe", "/c " + Link.downloadCommandMKDocs());
             // Create mkdocsokfile
             File.Create(Application.StartupPath + "\\Files\\mkdocs\\mkdocsokfile.file");
             if (ms)
@@ -167,11 +163,11 @@ namespace Mk_Docs_Server
             return true;
         }
 
-        public bool InstallVSC(bool ms)
+        public bool InstallEditor(bool ms)
         {
             // Download file from atomDownloadPath to /Files/atom-portable.zip and extract it to /Files/atom-portable
             if (Properties.Settings.Default.EditorID == 4)
-            { 
+            {
                 // EDITOR (Windows)
             }
             if (Properties.Settings.Default.EditorID == 5)
@@ -182,12 +178,27 @@ namespace Mk_Docs_Server
             {
                 using (WebClient client = new WebClient())
                 {
-                    if (Properties.Settings.Default.EditorID == 3) ;
-                // Test  // client.DownloadFile(Link.GetPath(), Application.StartupPath + "\\Files\\atom-portable.zip");
+                    if (Properties.Settings.Default.EditorID == 0) // Download für Atom
+                    {
+                        editorDownloadPath = Link.downloadPathAtom();
+                    }
+                    if (Properties.Settings.Default.EditorID == 1) // Download für VSC
+                    {
+                        editorDownloadPath = Link.downloadPathVSC();
+                    }
+                    if (Properties.Settings.Default.EditorID == 2) // Download für Notepad++
+                    {
+                        editorDownloadPath = Link.dowloadPathNotepadPP();
+                    }
+                    if(Properties.Settings.Default.EditorID == 3) // Download für den Spezifizierten Editor
+                    {
+                        editorDownloadPath = Properties.Settings.Default.EditorDownloadURL;
+                    }
+                    // Test  // client.DownloadFile(Link.GetPath(), Application.StartupPath + "\\Files\\atom-portable.zip");
                 }
-                ZipFile.ExtractToDirectory(Application.StartupPath + "\\Files\\atom-portable.zip", Application.StartupPath + "\\Files\\atom-portable");
+                ZipFile.ExtractToDirectory(Application.StartupPath + "\\Files\\editor-portable.zip", Application.StartupPath + "\\Files\\atom-portable");
                 // Delete /Files/atom-portable.zip
-                File.Delete(Application.StartupPath + "\\Files\\atom-portable.zip");
+                File.Delete(Application.StartupPath + "\\Files\\editor-portable.zip");
                 // Message Box Check
                 if (ms)
                 {
@@ -197,7 +208,7 @@ namespace Mk_Docs_Server
                     DialogResult result = MessageBox.Show(message, title, buttons, MessageBoxIcon.Information);
                     if (result == DialogResult.Yes)
                     {
-                        System.Diagnostics.Process.Start(Application.StartupPath + "\\Files\\atom-portable\\AtomPortable.exe");
+                        System.Diagnostics.Process.Start(Application.StartupPath + "\\Files\\editor-portable\\editor.exe");
                     }
                 }
             }
@@ -221,7 +232,7 @@ namespace Mk_Docs_Server
                 string title = "Sucessfully installed";
                 MessageBoxButtons buttons = MessageBoxButtons.OK;
                 DialogResult result = MessageBox.Show(message, title, buttons, MessageBoxIcon.Information);
-               
+
             }
             return true;
         }

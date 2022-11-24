@@ -36,7 +36,7 @@ namespace Mk_Docs_Server
             this.btnInstallAll = new System.Windows.Forms.Button();
             this.btnSaveWorkspaceFiles = new System.Windows.Forms.Button();
             this.btnInstallWorkspaceFiles = new System.Windows.Forms.Button();
-            this.btnInstallVSC = new System.Windows.Forms.Button();
+            this.btnInstallEditor = new System.Windows.Forms.Button();
             this.folderBrowserDialog1 = new System.Windows.Forms.FolderBrowserDialog();
             this.gbPanel = new System.Windows.Forms.GroupBox();
             this.btnServeServer = new System.Windows.Forms.Button();
@@ -78,7 +78,7 @@ namespace Mk_Docs_Server
             this.gbWorkspace.Controls.Add(this.btnInstallAll);
             this.gbWorkspace.Controls.Add(this.btnSaveWorkspaceFiles);
             this.gbWorkspace.Controls.Add(this.btnInstallWorkspaceFiles);
-            this.gbWorkspace.Controls.Add(this.btnInstallVSC);
+            this.gbWorkspace.Controls.Add(this.btnInstallEditor);
             this.gbWorkspace.Controls.Add(this.btnInstallServer);
             this.gbWorkspace.Location = new System.Drawing.Point(218, 12);
             this.gbWorkspace.Name = "gbWorkspace";
@@ -117,15 +117,15 @@ namespace Mk_Docs_Server
             this.btnInstallWorkspaceFiles.UseVisualStyleBackColor = true;
             this.btnInstallWorkspaceFiles.Click += new System.EventHandler(this.btnInstallWorkspaceFiles_Click);
             // 
-            // btnInstallVSC
+            // btnInstallEditor
             // 
-            this.btnInstallVSC.Location = new System.Drawing.Point(6, 77);
-            this.btnInstallVSC.Name = "btnInstallVSC";
-            this.btnInstallVSC.Size = new System.Drawing.Size(188, 23);
-            this.btnInstallVSC.TabIndex = 3;
-            this.btnInstallVSC.Text = "Editor installieren";
-            this.btnInstallVSC.UseVisualStyleBackColor = true;
-            this.btnInstallVSC.Click += new System.EventHandler(this.btnInstallVSC_Click);
+            this.btnInstallEditor.Location = new System.Drawing.Point(6, 77);
+            this.btnInstallEditor.Name = "btnInstallEditor";
+            this.btnInstallEditor.Size = new System.Drawing.Size(188, 23);
+            this.btnInstallEditor.TabIndex = 3;
+            this.btnInstallEditor.Text = "Editor installieren";
+            this.btnInstallEditor.UseVisualStyleBackColor = true;
+            this.btnInstallEditor.Click += new System.EventHandler(this.btnInstallEditor_Click);
             // 
             // gbPanel
             // 
@@ -173,7 +173,7 @@ namespace Mk_Docs_Server
         private System.Windows.Forms.Button btnInstallAll;
         private System.Windows.Forms.Button btnSaveWorkspaceFiles;
         private System.Windows.Forms.Button btnInstallWorkspaceFiles;
-        private System.Windows.Forms.Button btnInstallVSC;
+        private System.Windows.Forms.Button btnInstallEditor;
         private System.Windows.Forms.FolderBrowserDialog folderBrowserDialog1;
         private System.Windows.Forms.GroupBox gbPanel;
         private System.Windows.Forms.Button btnServeServer;
