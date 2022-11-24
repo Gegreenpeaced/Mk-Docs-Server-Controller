@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Activities;
 using System.IO;
 using System.IO.Compression;
 using System.Net;
@@ -11,22 +12,19 @@ namespace Mk_Docs_Server
         // ---------------
         // Global Variables
         // ---------------
-        
+
+
         public string editorDownloadPath;
-        public string atomDownloadPath = "https://nxcloud.norku.de/index.php/s/oiaEg8KdjB4j9qL/download/atom-editor.zip";
-        public string mkdocsserverinstallcommand = "pip --proxy http://kjs-03.lan.dd-schulen.de:3128 install mkdocs mkdocs-material break";
+        public string editorLocalPath;
         public string workspacePath;
-        public string settingsEditorDownloadURL = Properties.Settings.Default.EditorDownloadURL;
-        public int settingsEditorID = Properties.Settings.Default.EditorID;
+
 
         // ----------------
         // Main Form
         // ----------------
 
         public frmMain()
-        {
-            editorDownloadPath = (settingsEditorID == 2) ? settingsEditorDownloadURL : atomDownloadPath; // Vergleich ob EditorID 2 ist, wenn ja dann EditorDownloadURL, wenn nein dann atomDownloadPath
-
+        { 
             // Create Files folder in Application Path if not exsistant
             if (!Directory.Exists(Application.StartupPath + "\\Files"))
             {
@@ -63,15 +61,15 @@ namespace Mk_Docs_Server
             }
         }
 
-        private void btnInstallVSC_Click(object sender, EventArgs e)
+        private void btnInstallEditor_Click(object sender, EventArgs e)
         {
-            InstallVSC(true);
+            InstallEditor(true);
         }
 
         private void btnInstallAll_Click(object sender, EventArgs e)
         {
             InstallMKDocsServer(false);
-            InstallVSC(false);
+            InstallEditor(false);
             OpenWorkspacePath(false);
             string message = "Everything was sucessfully installed.";
             string title = "Sucessfully installed";
@@ -87,8 +85,8 @@ namespace Mk_Docs_Server
                     MessageBoxButtons buttons2 = MessageBoxButtons.OK;
                     DialogResult result2 = MessageBox.Show(message2, title2, buttons2, MessageBoxIcon.Error);
                 }
-                
-                
+
+
             }
         }
 
@@ -96,10 +94,15 @@ namespace Mk_Docs_Server
         {
             OpenWorkspacePath(true);
         }
-        
+
         private void btnSaveWorkspaceFiles_Click(object sender, EventArgs e)
         {
             ZipWorkspaceFiles(true);
+        }
+
+        private void btnStartEditor_Click(object sender, EventArgs e)
+        {
+            OpenEditor();
         }
 
         private void btnClose_Click(object sender, EventArgs e)
@@ -117,11 +120,29 @@ namespace Mk_Docs_Server
         // ----------------
         // Methods
         // ----------------
-
+        public bool OpenEditor()
+        {
+            // Check if editorLocalPath is set
+            if (editorLocalPath == null)
+            {
+                string message = "Please set the editor path in the settings.";
+                string title = "Editor path not set";
+                MessageBoxButtons buttons = MessageBoxButtons.OK;
+                DialogResult result = MessageBox.Show(message, title, buttons, MessageBoxIcon.Error);
+                return false;
+            }
+            else
+            {
+                // Open editor.exe from editorLocalPath
+                System.Diagnostics.Process.Start(editorLocalPath);
+                return true;
+            }
+        }
+        
         public int ServeServer(bool ms)
         {
             // Check if mkdocsokfile is exsistant in mkdocs folder
-            if (File.Exists(Application.StartupPath + "\\Files\\mkdocs\\mkdocsokfile.file"))
+            if (File.Exists(Application.StartupPath + "\\Files\\mkdocs\\mkdocsokfile.s"))
             {
                 // open file dialog to select folder to serve
                 FolderBrowserDialog fbd = new FolderBrowserDialog();
@@ -142,10 +163,10 @@ namespace Mk_Docs_Server
                 else
                 {
                     // Promt message box with invalid folder
-                        string message = "The selected folder is invalid. Try again";
-                        string title = "Invalid folder";
-                        MessageBoxButtons buttons = MessageBoxButtons.OK;
-                        DialogResult result = MessageBox.Show(message, title, buttons, MessageBoxIcon.Error);
+                    string message = "The selected folder is invalid. Try again";
+                    string title = "Invalid folder";
+                    MessageBoxButtons buttons = MessageBoxButtons.OK;
+                    DialogResult result = MessageBox.Show(message, title, buttons, MessageBoxIcon.Error);
                 }
             }
             return 3;
@@ -154,9 +175,9 @@ namespace Mk_Docs_Server
         public bool InstallMKDocsServer(bool ms)
         {
             // rund cmd.exe /c mkdocsserverinstallcommand
-            System.Diagnostics.Process.Start("cmd.exe", "/c " + mkdocsserverinstallcommand);
+            System.Diagnostics.Process.Start("cmd.exe", "/c " + Link.downloadCommandMKDocs());
             // Create mkdocsokfile
-            File.Create(Application.StartupPath + "\\Files\\mkdocs\\mkdocsokfile.file");
+            File.Create(Application.StartupPath + "\\Files\\mkdocs\\mkdocsokfile.s").Close();
             if (ms)
             {
                 string message = "Server installed.";
@@ -167,29 +188,107 @@ namespace Mk_Docs_Server
             return true;
         }
 
-        public bool InstallVSC(bool ms)
+        public bool InstallEditor(bool ms)
         {
-            // Download file from atomDownloadPath to /Files/atom-portable.zip and extract it to /Files/atom-portable
-            using (WebClient client = new WebClient())
+            // Check if EditorID is 4 or 5, if not download the specified editor and unzip it.
+            if (Properties.Settings.Default.EditorID == 4)
             {
-                client.DownloadFile(atomDownloadPath, Application.StartupPath + "\\Files\\atom-portable.zip");
-            }
-            ZipFile.ExtractToDirectory(Application.StartupPath + "\\Files\\atom-portable.zip", Application.StartupPath + "\\Files\\atom-portable");
-            // Delete /Files/atom-portable.zip
-            File.Delete(Application.StartupPath + "\\Files\\atom-portable.zip");
-            // Message Box Check
-            if (ms)
-            {
-                string message = "Editor installed. Do you want to start it?";
-                string title = "Sucessfully installed";
-                MessageBoxButtons buttons = MessageBoxButtons.YesNo;
-                DialogResult result = MessageBox.Show(message, title, buttons, MessageBoxIcon.Information);
-                if (result == DialogResult.Yes)
+                // EDITOR (Windows)
+                // set editorDownloadPath to the windows system folder
+                editorLocalPath = Environment.GetFolderPath(Environment.SpecialFolder.Windows) + @"\notepad.exe";
+
+                if (ms)
                 {
-                    System.Diagnostics.Process.Start(Application.StartupPath + "\\Files\\atom-portable\\AtomPortable.exe");
+                    string message = "Editor sucessfully linked. Do you want to start it?";
+                    string title = "Sucessfully linked";
+                    MessageBoxButtons buttons = MessageBoxButtons.YesNo;
+                    DialogResult result = MessageBox.Show(message, title, buttons, MessageBoxIcon.Information);
+                    if (result == DialogResult.Yes)
+                    {
+                        System.Diagnostics.Process.Start(editorLocalPath);
+                    }
+                }
+                return true;
+            }
+            if (Properties.Settings.Default.EditorID == 5)
+            {
+                // FILEPATH (Windows)
+                editorLocalPath = Properties.Settings.Default.EditorDownloadURL;
+                if (ms)
+                {
+                    string message = "Editor sucessfully linked. Do you want to start it?";
+                    string title = "Sucessfully linked";
+                    MessageBoxButtons buttons = MessageBoxButtons.YesNo;
+                    DialogResult result = MessageBox.Show(message, title, buttons, MessageBoxIcon.Information);
+                    if (result == DialogResult.Yes)
+                    {
+                        System.Diagnostics.Process.Start(editorLocalPath);
+                    }
+                }
+                return true;
+            }
+            else // IF EDITOR NEEDS TO BE DOWNLOADED
+            {
+                using (WebClient client = new WebClient())
+                {
+                    if (Properties.Settings.Default.EditorID == 0) // Download für Atom
+                    {
+                        editorDownloadPath = Link.downloadPathAtom();
+                        client.DownloadFile(editorDownloadPath, Application.StartupPath + "\\Files\\editor-portable.zip");
+                        editorLocalPath = Application.StartupPath + "\\Files\\editor-portable\\editor.exe";
+                    }
+                    if (Properties.Settings.Default.EditorID == 1) // Download für VSC
+                    {
+                        editorDownloadPath = Link.downloadPathVSC();
+                        client.DownloadFile(editorDownloadPath, Application.StartupPath + "\\Files\\editor-portable.zip");
+                        editorLocalPath = Application.StartupPath + "\\Files\\editor-portable\\editor.exe";
+                    }
+                    if (Properties.Settings.Default.EditorID == 2) // Download für Notepad++
+                    {
+                        editorDownloadPath = Link.dowloadPathNotepadPP();
+                        client.DownloadFile(editorDownloadPath, Application.StartupPath + "\\Files\\editor-portable.zip");
+                        editorLocalPath = Application.StartupPath + "\\Files\\editor-portable\\editor.exe";
+                    }
+                    if(Properties.Settings.Default.EditorID == 3) // Download für den Spezifizierten Editor
+                    {
+                        editorDownloadPath = Properties.Settings.Default.EditorDownloadURL;
+                        client.DownloadFile(editorDownloadPath, Application.StartupPath + "\\Files\\editor-portable.zip");
+                        editorLocalPath = Application.StartupPath + "\\Files\\editor-portable\\editor.exe";
+                    }
+                }
+
+                // check if editor-portable.zip is exsistant in Files folder
+                if (File.Exists(Application.StartupPath + "\\Files\\editor-portable.zip"))
+                {
+                    // unzip editor-portable.zip
+                    ZipFile.ExtractToDirectory(Application.StartupPath + "\\Files\\editor-portable.zip", Application.StartupPath + "\\Files\\editor-portable");
+                    // delete editor-portable.zip
+                    File.Delete(Application.StartupPath + "\\Files\\editor-portable.zip");
+                    if (ms)
+                    {
+                        string message = "Editor sucessfully installed. Do you want to start it?";
+                        string title = "Sucessfully installed";
+                        MessageBoxButtons buttons = MessageBoxButtons.YesNo;
+                        DialogResult result = MessageBox.Show(message, title, buttons, MessageBoxIcon.Information);
+                        if (result == DialogResult.Yes)
+                        {
+                            System.Diagnostics.Process.Start(editorLocalPath);
+                        }
+                    }
+                    return true;
+                }
+                else
+                {
+                    if (ms)
+                    {
+                        string message = "Editor installation failed.";
+                        string title = "Installation failed";
+                        MessageBoxButtons buttons = MessageBoxButtons.OK;
+                        DialogResult result = MessageBox.Show(message, title, buttons, MessageBoxIcon.Error);
+                    }
+                    return false;
                 }
             }
-            return true;
         }
 
         public bool OpenWorkspacePath(bool ms)
@@ -209,7 +308,7 @@ namespace Mk_Docs_Server
                 string title = "Sucessfully installed";
                 MessageBoxButtons buttons = MessageBoxButtons.OK;
                 DialogResult result = MessageBox.Show(message, title, buttons, MessageBoxIcon.Information);
-               
+
             }
             return true;
         }
