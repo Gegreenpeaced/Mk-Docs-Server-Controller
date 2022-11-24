@@ -362,4 +362,3 @@ MigrationBackup/
 # Fody - auto-generated XML schema
 FodyWeavers.xsd
 /MK-Docs-Updater/logindata.cs
-/Mk-Docs-Server/Link.cs
