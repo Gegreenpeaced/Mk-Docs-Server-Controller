@@ -36,8 +36,8 @@
             this.btnClose = new System.Windows.Forms.Button();
             this.btnSave = new System.Windows.Forms.Button();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
-            this.lblVersion = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
+            this.lblVersion = new System.Windows.Forms.Label();
             this.gbEditorSettings.SuspendLayout();
             this.groupBox1.SuspendLayout();
             this.SuspendLayout();
@@ -77,7 +77,10 @@
             this.cbEditors.Items.AddRange(new object[] {
             "Atom",
             "Visual Studio Code",
-            "Other"});
+            "Notepad++",
+            "Url",
+            "Editor",
+            "Filepath"});
             this.cbEditors.Location = new System.Drawing.Point(195, 13);
             this.cbEditors.Name = "cbEditors";
             this.cbEditors.Size = new System.Drawing.Size(279, 21);
@@ -124,15 +127,6 @@
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Informationen";
             // 
-            // lblVersion
-            // 
-            this.lblVersion.AutoSize = true;
-            this.lblVersion.Location = new System.Drawing.Point(6, 16);
-            this.lblVersion.Name = "lblVersion";
-            this.lblVersion.Size = new System.Drawing.Size(104, 13);
-            this.lblVersion.TabIndex = 2;
-            this.lblVersion.Text = "Aktuelle Version: 0.1";
-            // 
             // label2
             // 
             this.label2.AutoSize = true;
@@ -141,6 +135,15 @@
             this.label2.Size = new System.Drawing.Size(101, 13);
             this.label2.TabIndex = 3;
             this.label2.Text = "Author: Julius Reiter";
+            // 
+            // lblVersion
+            // 
+            this.lblVersion.AutoSize = true;
+            this.lblVersion.Location = new System.Drawing.Point(6, 16);
+            this.lblVersion.Name = "lblVersion";
+            this.lblVersion.Size = new System.Drawing.Size(104, 13);
+            this.lblVersion.TabIndex = 2;
+            this.lblVersion.Text = "Aktuelle Version: 0.1";
             // 
             // frmSettings
             // 

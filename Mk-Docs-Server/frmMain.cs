@@ -12,8 +12,8 @@ namespace Mk_Docs_Server
         // Global Variables
         // ---------------
         
+        // Noch variablen anpassen mit der Auslagerung in die Link.cs [Work]
         public string editorDownloadPath;
-        public string atomDownloadPath = "https://nxcloud.norku.de/index.php/s/oiaEg8KdjB4j9qL/download/atom-editor.zip";
         public string mkdocsserverinstallcommand = "pip --proxy http://kjs-03.lan.dd-schulen.de:3128 install mkdocs mkdocs-material break";
         public string workspacePath;
         public string settingsEditorDownloadURL = Properties.Settings.Default.EditorDownloadURL;
@@ -25,7 +25,7 @@ namespace Mk_Docs_Server
 
         public frmMain()
         {
-            editorDownloadPath = (settingsEditorID == 2) ? settingsEditorDownloadURL : atomDownloadPath; // Vergleich ob EditorID 2 ist, wenn ja dann EditorDownloadURL, wenn nein dann atomDownloadPath
+            // editorDownloadPath = (settingsEditorID == 2) ? settingsEditorDownloadURL : atomDownloadPath; // Vergleich ob EditorID 2 ist, wenn ja dann EditorDownloadURL, wenn nein dann atomDownloadPath
 
             // Create Files folder in Application Path if not exsistant
             if (!Directory.Exists(Application.StartupPath + "\\Files"))
@@ -170,23 +170,35 @@ namespace Mk_Docs_Server
         public bool InstallVSC(bool ms)
         {
             // Download file from atomDownloadPath to /Files/atom-portable.zip and extract it to /Files/atom-portable
-            using (WebClient client = new WebClient())
-            {
-                client.DownloadFile(atomDownloadPath, Application.StartupPath + "\\Files\\atom-portable.zip");
+            if (Properties.Settings.Default.EditorID == 4)
+            { 
+                // EDITOR (Windows)
             }
-            ZipFile.ExtractToDirectory(Application.StartupPath + "\\Files\\atom-portable.zip", Application.StartupPath + "\\Files\\atom-portable");
-            // Delete /Files/atom-portable.zip
-            File.Delete(Application.StartupPath + "\\Files\\atom-portable.zip");
-            // Message Box Check
-            if (ms)
+            if (Properties.Settings.Default.EditorID == 5)
             {
-                string message = "Editor installed. Do you want to start it?";
-                string title = "Sucessfully installed";
-                MessageBoxButtons buttons = MessageBoxButtons.YesNo;
-                DialogResult result = MessageBox.Show(message, title, buttons, MessageBoxIcon.Information);
-                if (result == DialogResult.Yes)
+                // FILEPATH (Windows)
+            }
+            else // IF EDITOR NEEDS TO BE DOWNLOADED
+            {
+                using (WebClient client = new WebClient())
                 {
-                    System.Diagnostics.Process.Start(Application.StartupPath + "\\Files\\atom-portable\\AtomPortable.exe");
+                    if (Properties.Settings.Default.EditorID == 3) ;
+                // Test  // client.DownloadFile(Link.GetPath(), Application.StartupPath + "\\Files\\atom-portable.zip");
+                }
+                ZipFile.ExtractToDirectory(Application.StartupPath + "\\Files\\atom-portable.zip", Application.StartupPath + "\\Files\\atom-portable");
+                // Delete /Files/atom-portable.zip
+                File.Delete(Application.StartupPath + "\\Files\\atom-portable.zip");
+                // Message Box Check
+                if (ms)
+                {
+                    string message = "Editor installed. Do you want to start it?";
+                    string title = "Sucessfully installed";
+                    MessageBoxButtons buttons = MessageBoxButtons.YesNo;
+                    DialogResult result = MessageBox.Show(message, title, buttons, MessageBoxIcon.Information);
+                    if (result == DialogResult.Yes)
+                    {
+                        System.Diagnostics.Process.Start(Application.StartupPath + "\\Files\\atom-portable\\AtomPortable.exe");
+                    }
                 }
             }
             return true;
