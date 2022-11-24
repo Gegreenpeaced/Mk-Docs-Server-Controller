@@ -14,6 +14,7 @@ namespace Mk_Docs_Server
 
 
         public string editorDownloadPath;
+        public string editorLocalPath;
         public string workspacePath;
 
 
@@ -165,14 +166,27 @@ namespace Mk_Docs_Server
 
         public bool InstallEditor(bool ms)
         {
-            // Download file from atomDownloadPath to /Files/atom-portable.zip and extract it to /Files/atom-portable
+            // Check if EditorID is 4 or 5, if not download the specified editor and unzip it.
             if (Properties.Settings.Default.EditorID == 4)
             {
                 // EDITOR (Windows)
+                editorLocalPath = ""; // noch spezifizieren
             }
             if (Properties.Settings.Default.EditorID == 5)
             {
                 // FILEPATH (Windows)
+                editorLocalPath = Properties.Settings.Default.EditorDownloadURL;
+                if (ms)
+                {
+                    string message = "Editor sucessfully linked. Do you want to start it?";
+                    string title = "Sucessfully linked";
+                    MessageBoxButtons buttons = MessageBoxButtons.YesNo;
+                    DialogResult result = MessageBox.Show(message, title, buttons, MessageBoxIcon.Information);
+                    if (result == DialogResult.Yes)
+                    {
+                        System.Diagnostics.Process.Start(editorLocalPath);
+                    }
+                }
             }
             else // IF EDITOR NEEDS TO BE DOWNLOADED
             {
